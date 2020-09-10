@@ -1,0 +1,15 @@
+<pluginMetaData path="git-ext">
+    <name>Git Channel Extension</name>
+    <author>Kiran Ayyagari</author>
+    <pluginVersion>${project.version}</pluginVersion>
+    <mirthVersion>${plugin.supported.mc.versions}</mirthVersion>
+    <url>http://keydap.com/</url>
+    <description>Plugin for Version controlling Channels and CodeTemplates.</description>
+
+    <serverClasses>
+        <string>com.kayyagari.ChannelVersionController</string>
+    </serverClasses>
+
+    <library type="SERVER" path="git-ext-server-${project.version}.jar" />
+    <library type="SHARED" path="git-ext-shared-${project.version}.jar" />
+</pluginMetaData>

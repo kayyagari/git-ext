@@ -1,14 +1,26 @@
 package com.kayyagari;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.ObjectLoader;
+import org.eclipse.jgit.lib.ObjectStream;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mirth.connect.donkey.server.Donkey;
 import com.mirth.connect.model.Channel;
@@ -29,7 +41,7 @@ public class GitChannelRepository {
 
     private Charset utf8 = Charset.forName("utf-8");
 
-    private static Logger log = Logger.getLogger(GitChannelRepository.class);
+    private static Logger log = LoggerFactory.getLogger(GitChannelRepository.class);
 
     public static final String DATA_DIR = "git-ext-data";
 
@@ -49,9 +61,7 @@ public class GitChannelRepository {
                 channelRepo.dir.mkdir();
                 
                 Git git = Git.init().setDirectory(channelRepo.dir).call();
-                Repository repo = new FileRepositoryBuilder().setWorkTree(channelRepo.dir)
-                        .readEnvironment().findGitDir().build();
-                channelRepo.repo = repo;
+                channelRepo.repo = git.getRepository();
                 channelRepo.git = git;
                 channelRepo.serializer = serializer;
             }
@@ -113,5 +123,71 @@ public class GitChannelRepository {
 
     public void removeCodeTemplate(CodeTemplate ct, PersonIdent committer) {
         removeFile(ct.getId(), committer);        
+    }
+    
+    public void close() {
+        repo.close();
+    }
+
+    public List<RevisionInfo> getHistory(String fileName) throws Exception {
+        List<RevisionInfo> lst = new ArrayList<>();
+        
+        Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
+        while(rcItr.hasNext()) {
+            RevCommit rc = rcItr.next();
+            lst.add(toRevisionInfo(rc));
+        }
+
+        return lst;
+    }
+    
+    public String getRevision(String fileName, String hash) throws Exception {
+        String content = null;
+        if(StringUtils.isBlank(fileName) || StringUtils.isBlank(hash)) {
+            return content;
+        }
+
+        try(TreeWalk tw = new TreeWalk(repo)) {
+            ObjectId rcid = repo.resolve(hash);
+            if(rcid != null) {
+                RevCommit rc = repo.parseCommit(rcid);
+                
+                tw.setRecursive(true);
+                tw.setFilter(PathFilter.create(fileName));
+                tw.addTree(rc.getTree());
+                if(tw.next()) {
+                    ObjectLoader objLoader = repo.open(tw.getObjectId(0));
+                    ObjectStream stream = objLoader.openStream();
+                    byte[] buf = new byte[1024];
+                    ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                    while(true) {
+                        int len = stream.read(buf);
+                        if(len <= 0) {
+                            break;
+                        }
+                        byteOut.write(buf, 0, len);
+                    }
+                    stream.close();
+                    
+                    content = new String(byteOut.toByteArray(), utf8);
+                }
+            }
+        }
+        catch(MissingObjectException e) {
+            log.debug("commit " + hash + " not found for file " + fileName, e);
+        }
+        return content;
+    }
+    
+    private RevisionInfo toRevisionInfo(RevCommit rc) {
+        RevisionInfo ri = new RevisionInfo();
+        PersonIdent committer = rc.getCommitterIdent();
+        ri.setCommitterEmail(committer.getEmailAddress());
+        ri.setCommitterName(committer.getName());
+        ri.setHash(rc.getName());
+        ri.setMessage(rc.getFullMessage());
+        ri.setTime(committer.getWhen().getTime());
+        
+        return ri;
     }
 }

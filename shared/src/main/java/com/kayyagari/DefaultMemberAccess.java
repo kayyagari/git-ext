@@ -1,5 +1,7 @@
 package com.kayyagari;
 
+// copy of https://github.com/apache/commons-ognl/blob/master/src/main/java/org/apache/commons/ognl/DefaultMemberAccess.java
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file

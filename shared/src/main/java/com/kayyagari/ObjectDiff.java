@@ -2,12 +2,9 @@ package com.kayyagari;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 import java.util.TreeMap;
 
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -15,28 +12,26 @@ import org.apache.commons.beanutils.DefaultBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.io.IOUtils;
 
+import com.kayyagari.objmeld.OgnlComparison;
 import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
 
-import ognl.MemberAccess;
-import ognl.Ognl;
 import ognl.OgnlContext;
 
 public class ObjectDiff {
     private Object left;
     private Object right;
 
-    private static final Set<Class> primitiveObjClasses = new HashSet<>();
+    private Map<String, FieldNode> leftNodes;
+    private Map<String, FieldNode> rightNodes;
+
+    private OgnlContext ctx = new OgnlContext(null, null, new DefaultMemberAccess(true));
+
     private static final BeanUtilsBean beanUtilBean = new BeanUtilsBean();
 
     static {
         beanUtilBean.getPropertyUtils().removeBeanIntrospector(DefaultBeanIntrospector.INSTANCE);
         beanUtilBean.getPropertyUtils().addBeanIntrospector(FieldOnlyIntrospector.INSTANCE);
-        
-        primitiveObjClasses.add(String.class);
-        primitiveObjClasses.add(Character.class);
-        primitiveObjClasses.add(Boolean.class);
-        primitiveObjClasses.add(Number.class);
     }
 
     public ObjectDiff(Object left, Object right) {
@@ -45,65 +40,68 @@ public class ObjectDiff {
     }
 
     public void create() throws Exception {
-        OgnlContext ctx = new OgnlContext(null, null, new DefaultMemberAccess(true));
-
-        PropertyUtilsBean putils = beanUtilBean.getPropertyUtils();
-        Map<String, Object> map = new TreeMap<>(putils.describe(left)); // sort the fields, never the expressions
-
-        Map<String, List<String>> exprsMap = new LinkedHashMap<>();
-        for(Map.Entry<String, Object> e : map.entrySet()) {
-            List<String> lst = new ArrayList<>();
-            Stack<String> path = new Stack<>();
-            gatherFields(e.getKey(), e.getValue(), path, lst);
-            System.out.println(e.getKey() + " " + lst);
-            exprsMap.put(e.getKey(), lst);
-        }
-
-        Channel ch = (Channel)left;
-        ch.getSourceConnector().setProperties(null);
-        List<String> lst = exprsMap.get("sourceConnector");
-        for(String expr : lst) {
-            System.out.print(expr + "-->");
-            System.out.println(Ognl.getValue(expr, ctx, left));
-        }
+        //Channel ch = (Channel)left;
+        //ch.getSourceConnector().getProperties().setPluginProperties(new HashSet<>());
+        leftNodes = create(left);
+        rightNodes = create(right);
+//        ch.getSourceConnector().setProperties(null);
+//        List<String> lst = exprsMap.get("sourceConnector");
+//        for(String expr : lst) {
+//            System.out.print(expr + "-->");
+//            System.out.println(Ognl.getValue(expr, ctx, left));
+//        }
     }
-    
-    private void gatherFields(String objFieldName, Object obj, Stack<String> path, List<String> exprs) throws Exception {
-        path.push(objFieldName);
-        if(obj != null) {
-            FieldType vt = getType(obj);
+
+    private Map<String, FieldNode> create(Object root) throws Exception {
+        PropertyUtilsBean putils = beanUtilBean.getPropertyUtils();
+        Map<String, Object> map = new TreeMap<>(putils.describe(root)); // sort the fields, never the expressions
+
+        Map<String, FieldNode> nodes = new TreeMap<>();
+        for(Map.Entry<String, Object> e : map.entrySet()) {
+            String name = e.getKey();
+            if(name.equals("name") || name.equals("description") || name.equals("deployScript")) {
+                
+            }
+            String path = name;
+            Object value = e.getValue();
+            FieldNode child = new FieldNode(name, path, value);
+            gatherFields(child);
+            nodes.put(name, child);
+            System.out.println(child);
+        }
+        
+        return nodes;
+    }
+
+    private void gatherFields(FieldNode fn) throws Exception {
+        if(fn.getValue() != null) {
+            FieldType vt = getType(fn.getValue());
             switch (vt) {
             case PRIMITIVE:
-                exprs.add(toExpr(path));
-                break;
-
             case INDEXED:
-                exprs.add(toExpr(path));
-                break;
-
             case SET:
-                exprs.add(toExpr(path));
-                break;
-
             case MAP:
-                exprs.add(toExpr(path));
+                fn.setType(vt);
                 break;
 
             case OBJECT:
-                exprs.add(toExpr(path));
-                Map<String, Object> map = beanUtilBean.getPropertyUtils().describe(obj);
+                fn.setType(vt);
+                Map<String, Object> map = beanUtilBean.getPropertyUtils().describe(fn.getValue());
                 map = new TreeMap<>(map); // sort the fields, never the expressions
                 for(Map.Entry<String, Object> e : map.entrySet()) {
-                    gatherFields(e.getKey(), e.getValue(), path, exprs);
+                    String name = e.getKey();
+                    String path = fn.getPath() + "." + name;
+                    FieldNode child = new FieldNode(name, path, e.getValue());
+                    fn.addChild(child);
+                    gatherFields(child);
                 }
                 break;
+                
+            case UNKNOWN:
+                throw new IllegalStateException("unknonw field type for field path " + fn.getPath());
+                    
             }
         }
-        else {
-            exprs.add(toExpr(path));
-        }
-        
-        path.pop();
     }
 
     private FieldType getType(Object obj) {
@@ -139,26 +137,36 @@ public class ObjectDiff {
         return vt;
     }
 
-    private String toExpr(Stack<String> path) {
-        int len = path.size();
-        StringBuilder sb = new StringBuilder();
-        if(len > 0) {
-            for(int i=0; i < len; i++) {
-                sb.append(path.elementAt(i)).append('.');
+    public void show() {
+        for(Map.Entry<String, FieldNode> e : leftNodes.entrySet()) {
+            if(!rightNodes.containsKey(e.getKey())) {
+                System.out.println("not found " + e.getKey());
+                rightNodes.put(e.getKey(), (FieldNode)e.getValue().emptyPeer());
             }
-            sb.deleteCharAt(sb.length()-1);
         }
-        
-        return sb.toString();
+
+        for(Map.Entry<String, FieldNode> e : rightNodes.entrySet()) {
+            if(!leftNodes.containsKey(e.getKey())) {
+                leftNodes.put(e.getKey(), (FieldNode)e.getValue().emptyPeer());
+            }
+        }
+
+        OgnlComparison.show(new ArrayList<>(leftNodes.values()), new ArrayList<>(rightNodes.values()));
     }
 
     public static void main(String[] args) throws Exception {
         ObjectXMLSerializer serializer = ObjectXMLSerializer.getInstance();
         serializer.init("3.9.1");
-        String xml = IOUtils.resourceToString("channel-for-diffing-version1.xml", Charset.forName("utf-8"), ObjectDiff.class.getClassLoader());
-        Channel ch = serializer.deserialize(xml, Channel.class);
         
-        ObjectDiff od = new ObjectDiff(ch, null);
+        String chXml1 = IOUtils.resourceToString("channel-for-diffing-version1.xml", Charset.forName("utf-8"), ObjectDiff.class.getClassLoader());
+        Channel chLeft = serializer.deserialize(chXml1, Channel.class);
+        
+        String chXml2 = IOUtils.resourceToString("channel-for-diffing-version2.xml", Charset.forName("utf-8"), ObjectDiff.class.getClassLoader());
+        Channel chRight = serializer.deserialize(chXml2, Channel.class);
+        //System.out.println(chRight);
+
+        ObjectDiff od = new ObjectDiff(chLeft, chRight);
         od.create();
+        od.show();
     }
 }

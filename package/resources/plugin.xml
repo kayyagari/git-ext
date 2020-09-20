@@ -10,6 +10,18 @@
         <string>com.kayyagari.ChannelVersionController</string>
     </serverClasses>
 
+    <clientClasses>
+        <string>com.kayyagari.VersionHistoryTabPlugin</string>
+    </clientClasses>
+
+    <library type="SERVER" path="org.eclipse.jgit-${jgit.version}.jar" />
+    <library type="SERVER" path="JavaEWAH-${jgit.JavaEWAH.version}.jar" />
+    <library type="SERVER" path="slf4j-api-1.7.2.jar" />
+
+    <library type="SHARED" path="objmeld-${objmeld.version}.jar" />
+    <library type="SHARED" path="forms-1.0.5.jar" />
+
     <library type="SERVER" path="git-ext-server-${project.version}.jar" />
     <library type="SHARED" path="git-ext-shared-${project.version}.jar" />
+    <library type="CLIENT" path="git-ext-client-${project.version}.jar" />
 </pluginMetaData>

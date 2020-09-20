@@ -2,7 +2,7 @@
   <id>3e20c9e5-3b32-4dd1-96b6-cc027d61386e</id>
   <nextMetaDataId>3</nextMetaDataId>
   <name>channel-for-diffing-version2</name>
-  <description></description>
+  <description>this is a second version of channel</description>
   <revision>4</revision>
   <sourceConnector version="3.9.1">
     <metaDataId>0</metaDataId>

@@ -10,4 +10,5 @@ public class ObjectDiffTest {
         System.out.println(s.getClass().isPrimitive());
         System.out.println(i.getClass().isPrimitive());
     }
+    
 }

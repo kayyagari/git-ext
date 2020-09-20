@@ -2,7 +2,7 @@
   <id>3e20c9e5-3b32-4dd1-96b6-cc027d61386e</id>
   <nextMetaDataId>3</nextMetaDataId>
   <name>channel-diff</name>
-  <description></description>
+  <description>this is a channel for demoing git extension diffing capability</description>
   <revision>1</revision>
   <sourceConnector version="3.9.1">
     <metaDataId>0</metaDataId>

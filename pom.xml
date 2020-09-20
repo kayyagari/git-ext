@@ -12,7 +12,9 @@
   <properties>
     <mc.version>3.9.1</mc.version>
     <plugin.supported.mc.versions>${mc.version}</plugin.supported.mc.versions>
-    <jgit.version>5.8.1.202007141445-r</jgit.version>
+    <jgit.version>5.9.0.202009080501-r</jgit.version>
+    <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
+    <objmeld.version>3.4.0</objmeld.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <signing.keystore>${user.dir}/mcplugin.jks</signing.keystore>
@@ -77,7 +79,19 @@
         </dependency>
         <dependency>
             <groupId>com.mirth.connect.extensions</groupId>
+            <artifactId>javascriptstep-shared</artifactId>
+            <version>${mc.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mirth.connect.extensions</groupId>
             <artifactId>tcp-shared</artifactId>
+            <version>${mc.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mirth.connect.extensions</groupId>
+            <artifactId>mllpmode-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -106,8 +120,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-ognl</artifactId>
+            <groupId>ognl</groupId>
+            <artifactId>ognl</artifactId>
             <version>3.2.15</version>
             <exclusions>
                 <exclusion>

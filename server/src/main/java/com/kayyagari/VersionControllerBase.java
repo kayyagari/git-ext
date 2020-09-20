@@ -18,7 +18,7 @@ public abstract class VersionControllerBase {
                 email = username + "@" + "local";
             }
 
-            return new PersonIdent(username, email);
+            return new PersonIdent(username, email, System.currentTimeMillis(), 0); // UTC
         }
         catch(Exception e) {
             throw new RuntimeException(e);

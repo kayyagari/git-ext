@@ -28,6 +28,11 @@
             <artifactId>git-ext-shared</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.kayyagari</groupId>
+            <artifactId>git-ext-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -67,7 +72,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/to-be-packed</outputDirectory>
-                            <excludeTransitive>true</excludeTransitive>
+                            <excludeTransitive>false</excludeTransitive>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -92,6 +97,8 @@
                     <archiveDirectory>${project.build.directory}/to-be-packed</archiveDirectory>
                     <includes>
                         <include>*${project.version}*.jar</include>
+                        <include>objmeld-*.jar</include>
+                        <include>forms-*.jar</include>
                     </includes>
                     <keystore>${signing.keystore}</keystore>
                     <alias>${signing.alias}</alias>

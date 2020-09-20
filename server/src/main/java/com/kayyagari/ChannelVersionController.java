@@ -5,11 +5,9 @@ import org.apache.log4j.Logger;
 import com.mirth.connect.donkey.server.Donkey;
 import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.ServerEventContext;
-import com.mirth.connect.model.User;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import com.mirth.connect.plugins.ChannelPlugin;
 import com.mirth.connect.server.controllers.ControllerFactory;
-import com.mirth.connect.server.controllers.UserController;
 
 public class ChannelVersionController extends VersionControllerBase implements ChannelPlugin {
 

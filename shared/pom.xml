@@ -13,5 +13,16 @@
     <name>Git Extension Shared</name>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jmeld</groupId>
+            <artifactId>objmeld</artifactId>
+            <version>${objmeld.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>eu.medsea.mimeutil</groupId>
+                    <artifactId>mime-util</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

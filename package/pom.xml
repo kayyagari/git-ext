@@ -98,7 +98,6 @@
                     <includes>
                         <include>*${project.version}*.jar</include>
                         <include>objmeld-*.jar</include>
-                        <include>forms-*.jar</include>
                     </includes>
                     <keystore>${signing.keystore}</keystore>
                     <alias>${signing.alias}</alias>

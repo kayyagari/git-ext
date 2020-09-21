@@ -127,6 +127,7 @@ public class GitChannelRepository {
     
     public void close() {
         repo.close();
+        channelRepo = null;
     }
 
     public List<RevisionInfo> getHistory(String fileName) throws Exception {
@@ -141,14 +142,14 @@ public class GitChannelRepository {
         return lst;
     }
     
-    public String getRevision(String fileName, String hash) throws Exception {
+    public String getContent(String fileName, String revision) throws Exception {
         String content = null;
-        if(StringUtils.isBlank(fileName) || StringUtils.isBlank(hash)) {
+        if(StringUtils.isBlank(fileName) || StringUtils.isBlank(revision)) {
             return content;
         }
 
         try(TreeWalk tw = new TreeWalk(repo)) {
-            ObjectId rcid = repo.resolve(hash);
+            ObjectId rcid = repo.resolve(revision);
             if(rcid != null) {
                 RevCommit rc = repo.parseCommit(rcid);
                 
@@ -174,7 +175,7 @@ public class GitChannelRepository {
             }
         }
         catch(MissingObjectException e) {
-            log.debug("commit " + hash + " not found for file " + fileName, e);
+            log.debug("commit " + revision + " not found for file " + fileName, e);
         }
         return content;
     }

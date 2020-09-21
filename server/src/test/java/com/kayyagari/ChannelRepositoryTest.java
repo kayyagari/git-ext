@@ -43,7 +43,7 @@ public class ChannelRepositoryTest {
     @Before
     public void initRepo() throws Exception {
         parentDir = tmpFolder.newFolder().getAbsolutePath();
-        parentDir = "/tmp";
+        //parentDir = "/tmp";
         GitChannelRepository.init(parentDir, serializer);
         repo = GitChannelRepository.getInstance();
         System.out.println(repo.getDir());
@@ -108,13 +108,13 @@ public class ChannelRepositoryTest {
             assertTrue(ri.getTime() > 0);
         }
         
-        String content = repo.getRevision(channel1.getId(), commits.get(0).getHash());
+        String content = repo.getContent(channel1.getId(), commits.get(0).getHash());
         assertNotNull(content);
         
-        content = repo.getRevision("non-exiting-file", commits.get(0).getHash()); // invalid file but valid hash
+        content = repo.getContent("non-exiting-file", commits.get(0).getHash()); // invalid file but valid hash
         assertNull(content);
 
-        content = repo.getRevision(channel1.getId(), "abcde"); // valid file but invalid hash
+        content = repo.getContent(channel1.getId(), "abcde"); // valid file but invalid hash
         assertNull(content);
     }
 }

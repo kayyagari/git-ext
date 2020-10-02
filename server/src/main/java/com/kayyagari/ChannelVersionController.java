@@ -9,6 +9,9 @@ import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import com.mirth.connect.plugins.ChannelPlugin;
 import com.mirth.connect.server.controllers.ControllerFactory;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class ChannelVersionController extends VersionControllerBase implements ChannelPlugin {
 
     private static Logger log = Logger.getLogger(ChannelVersionController.class);
@@ -34,6 +37,7 @@ public class ChannelVersionController extends VersionControllerBase implements C
 
     @Override
     public void stop() {
+        repo.close();
     }
 
     @Override
@@ -44,6 +48,7 @@ public class ChannelVersionController extends VersionControllerBase implements C
 
     @Override
     public void remove(Channel channel, ServerEventContext sec) {
+        repo.removeChannel(channel, getCommitter(sec));
     }
 
     @Override

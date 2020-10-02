@@ -2,6 +2,9 @@ package com.kayyagari;
 
 import org.junit.Test;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class ObjectDiffTest {
     @Test
     public void testDiffing() {

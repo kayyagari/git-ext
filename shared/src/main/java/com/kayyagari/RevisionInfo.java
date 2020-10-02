@@ -1,5 +1,8 @@
 package com.kayyagari;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class RevisionInfo {
     private String hash;
     private String committerName;

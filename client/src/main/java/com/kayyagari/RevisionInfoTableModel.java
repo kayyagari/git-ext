@@ -8,6 +8,9 @@ import org.joda.time.Period;
 import org.joda.time.format.ISOPeriodFormat;
 import org.joda.time.format.PeriodFormatter;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class RevisionInfoTableModel extends AbstractTableModel {
 
     private List<RevisionInfo> revisions;
@@ -70,6 +73,10 @@ public class RevisionInfoTableModel extends AbstractTableModel {
             throw new IllegalArgumentException("unknown column number " + columnIndex);
         }
         return val;
+    }
+
+    public RevisionInfo getRevisionAt(int row) {
+        return revisions.get(row);
     }
 
     private String formatTime(long t) {

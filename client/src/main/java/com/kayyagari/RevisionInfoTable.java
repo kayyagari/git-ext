@@ -6,6 +6,9 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import com.mirth.connect.client.ui.UIConstants;
 import com.mirth.connect.client.ui.components.MirthTable;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class RevisionInfoTable extends MirthTable {
 
     public RevisionInfoTable() {

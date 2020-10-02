@@ -14,10 +14,11 @@
     <plugin.supported.mc.versions>${mc.version}</plugin.supported.mc.versions>
     <jgit.version>5.9.0.202009080501-r</jgit.version>
     <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
+    <ognl.version>3.2.15</ognl.version>
     <objmeld.version>3.4.0</objmeld.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <signing.keystore>${user.dir}/mcplugin.jks</signing.keystore>
+    <signing.keystore>${user.dir}/gitextplugin.jks</signing.keystore>
     <signing.alias>alias</signing.alias>
     <signing.storepass>secret</signing.storepass>
     <signing.keypass>secret</signing.keypass>
@@ -25,8 +26,8 @@
   </properties>
 
   <organization>
-      <name>Kiran A</name>
-      <url>http://keydap.com</url>
+      <name>Kiran Ayyagari</name>
+      <url>mailto:kayyagari@apache.org</url>
   </organization>
 
   <dependencies>
@@ -122,7 +123,7 @@
         <dependency>
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
-            <version>3.2.15</version>
+            <version>${ognl.version}</version>
             <exclusions>
                 <exclusion>
                   <!-- excluding the dependency to avoid classloading issues
@@ -207,7 +208,7 @@
           <configuration>
               <archive>
                   <manifestEntries>
-                      <Application-Name>Channel Version Controller</Application-Name>
+                      <Application-Name>Git Extension</Application-Name>
                       <url>${project.url}</url>
                       <authors>Kiran Ayyagari</authors>
                   </manifestEntries>

@@ -1,9 +1,9 @@
 <pluginMetaData path="git-ext">
-    <name>Git Channel Extension</name>
+    <name>Git Extension</name>
     <author>Kiran Ayyagari</author>
     <pluginVersion>${project.version}</pluginVersion>
     <mirthVersion>${plugin.supported.mc.versions}</mirthVersion>
-    <url>http://keydap.com/</url>
+    <url>mailto:kayyagari@apache.org</url>
     <description>Plugin for Version controlling Channels and CodeTemplates.</description>
 
     <serverClasses>

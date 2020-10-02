@@ -27,6 +27,9 @@ import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.codetemplates.CodeTemplate;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class GitChannelRepository {
     
     private static GitChannelRepository channelRepo;

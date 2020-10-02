@@ -10,8 +10,10 @@ import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import com.mirth.connect.plugins.CodeTemplateServerPlugin;
 import com.mirth.connect.server.controllers.ControllerFactory;
 
-public class CodeTemplateVersionController extends VersionControllerBase
-        implements CodeTemplateServerPlugin {
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
+public class CodeTemplateVersionController extends VersionControllerBase implements CodeTemplateServerPlugin {
 
     private static Logger log = Logger.getLogger(CodeTemplateVersionController.class);
 
@@ -36,6 +38,7 @@ public class CodeTemplateVersionController extends VersionControllerBase
 
     @Override
     public void stop() {
+        // do not close the repo here it gets called from ChannelVersionController
     }
 
     @Override

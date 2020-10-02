@@ -1,5 +1,8 @@
 package com.kayyagari;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public enum FieldType {
-    PRIMITIVE, INDEXED, SET, MAP, OBJECT, UNKNOWN;
+    PRIMITIVE, ARRAY, LIST, SET, MAP, OBJECT, UNKNOWN;
 }

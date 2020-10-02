@@ -20,12 +20,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 @Path("/extensions/git-ext")
 @Tag(name = "Git Version Controller Extension")
 @Consumes(MediaType.APPLICATION_XML)
 @Produces(MediaType.APPLICATION_XML)
 public interface GitExtServletInterface extends BaseServletInterface {
-    public static final String PLUGIN_NAME = "git-ext";
+    public static final String PLUGIN_NAME = "Git Extension";
     
     @GET
     @Path("/history")

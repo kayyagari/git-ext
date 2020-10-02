@@ -98,6 +98,7 @@
                     <includes>
                         <include>*${project.version}*.jar</include>
                         <include>objmeld-*.jar</include>
+                        <include>ognl-*.jar</include>
                     </includes>
                     <keystore>${signing.keystore}</keystore>
                     <alias>${signing.alias}</alias>
@@ -118,7 +119,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>${packageName}_${versionNumber}</finalName>
+                            <finalName>${packageName}-${versionNumber}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>${project.build.directory}</outputDirectory>
                             <descriptors>

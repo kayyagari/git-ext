@@ -11,6 +11,9 @@ import org.apache.log4j.Logger;
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.server.api.MirthServlet;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class GitExtServlet extends MirthServlet implements GitExtServletInterface {
 
     private static Logger log = Logger.getLogger(GitExtServlet.class);

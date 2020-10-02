@@ -14,6 +14,9 @@ import org.apache.commons.beanutils.IntrospectionContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class FieldOnlyIntrospector implements BeanIntrospector {
     /** The singleton instance of this class. */
     public static final BeanIntrospector INSTANCE = new FieldOnlyIntrospector();

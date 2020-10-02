@@ -6,6 +6,9 @@ import com.mirth.connect.model.ServerEventContext;
 import com.mirth.connect.model.User;
 import com.mirth.connect.server.controllers.UserController;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public abstract class VersionControllerBase {
     protected UserController userController;
     

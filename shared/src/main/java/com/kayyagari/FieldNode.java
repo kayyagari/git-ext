@@ -5,6 +5,9 @@ import java.util.TreeMap;
 
 import com.kayyagari.objmeld.OgnlContent;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class FieldNode implements Comparable<FieldNode>, OgnlContent {
     private String name;
     private String path;
@@ -30,12 +33,15 @@ public class FieldNode implements Comparable<FieldNode>, OgnlContent {
 
     @Override
     public OgnlContent emptyPeer() {
-        return new FieldNode(name, path, "empty-peer");
+        return new FieldNode(name, path, "");
     }
 
     @Override
     public String toText() {
-        if(value == null || type == FieldType.OBJECT) {
+        if(value == null 
+                || type == FieldType.OBJECT 
+                || type == FieldType.ARRAY 
+                || type == FieldType.LIST) {
             return "";
         }
         

@@ -39,4 +39,41 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                        <!-- including all the classes of ognl library so that only one client specific
+                        jar is present besides the shared jar also it makes JavaWS show the name(which
+                        otherwisedoesn't appear if ognl jar is verified first due to missing Application-Name
+                        property in MANIFEST.MF) of the extension on the security dialog -->
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>ognl</groupId>
+                                    <artifactId>ognl</artifactId>
+                                    <version>${ognl.version}</version>
+                                    <includes>**/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <excludeTransitive>true</excludeTransitive>
+                            <overWriteReleases>true</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

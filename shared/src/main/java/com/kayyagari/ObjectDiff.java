@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.swing.JPanel;
+
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.DefaultBeanIntrospector;
 import org.apache.commons.beanutils.PropertyUtilsBean;
@@ -18,6 +20,9 @@ import com.mirth.connect.model.converters.ObjectXMLSerializer;
 
 import ognl.OgnlContext;
 
+/**
+ * @author Kiran Ayyagari (kayyagari@apache.org)
+ */
 public class ObjectDiff {
     private Object left;
     private Object right;
@@ -59,9 +64,6 @@ public class ObjectDiff {
         Map<String, FieldNode> nodes = new TreeMap<>();
         for(Map.Entry<String, Object> e : map.entrySet()) {
             String name = e.getKey();
-            if(name.equals("name") || name.equals("description") || name.equals("deployScript")) {
-                
-            }
             String path = name;
             Object value = e.getValue();
             FieldNode child = new FieldNode(name, path, value);
@@ -78,10 +80,20 @@ public class ObjectDiff {
             FieldType vt = getType(fn.getValue());
             switch (vt) {
             case PRIMITIVE:
-            case INDEXED:
+            case ARRAY:
             case SET:
             case MAP:
                 fn.setType(vt);
+                break;
+            case LIST:
+                fn.setType(vt);
+                List lst = (List)fn.getValue();
+                for(int k=0; k< lst.size(); k++) {
+                    String path = fn.getPath() + "[" + k + "]";
+                    FieldNode chFn = new FieldNode(path, path, lst.get(k));
+                    fn.addChild(chFn);
+                    gatherFields(chFn);
+                }
                 break;
 
             case OBJECT:
@@ -113,7 +125,7 @@ public class ObjectDiff {
             if(c == String.class
                     || c == Character.class
                     || c == Boolean.class
-                    || c.isAssignableFrom(Number.class)) {
+                    || Number.class.isAssignableFrom(c)) {
                 primitive = true;
             }
         }
@@ -122,25 +134,28 @@ public class ObjectDiff {
             vt = FieldType.PRIMITIVE;
         }
 
-        if(c.isArray() || c.isAssignableFrom(List.class)) {
-            vt = FieldType.INDEXED;
+        if(c.isArray()) {
+            vt = FieldType.ARRAY;
         }
 
-        if(c.isAssignableFrom(Set.class)) {
+        if(List.class.isAssignableFrom(c)) {
+            vt = FieldType.LIST;
+        }
+
+        if(Set.class.isAssignableFrom(c)) {
             vt = FieldType.SET;
         }
 
-        if(c.isAssignableFrom(Map.class)) {
+        if(Map.class.isAssignableFrom(c)) {
             vt = FieldType.MAP;
         }
 
         return vt;
     }
 
-    public void show() {
+    private void insertMissingPeers() {
         for(Map.Entry<String, FieldNode> e : leftNodes.entrySet()) {
             if(!rightNodes.containsKey(e.getKey())) {
-                System.out.println("not found " + e.getKey());
                 rightNodes.put(e.getKey(), (FieldNode)e.getValue().emptyPeer());
             }
         }
@@ -150,8 +165,16 @@ public class ObjectDiff {
                 leftNodes.put(e.getKey(), (FieldNode)e.getValue().emptyPeer());
             }
         }
+    }
 
-        OgnlComparison.show(new ArrayList<>(leftNodes.values()), new ArrayList<>(rightNodes.values()));
+    public JPanel getVisualPanel() {
+        insertMissingPeers();
+        return OgnlComparison.prepare(new ArrayList<>(leftNodes.values()), new ArrayList<>(rightNodes.values()), false);
+    }
+
+    public void show() {
+        JPanel panel = getVisualPanel();
+        OgnlComparison.show(panel);
     }
 
     public static void main(String[] args) throws Exception {

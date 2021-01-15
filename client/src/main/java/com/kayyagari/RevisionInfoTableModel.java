@@ -1,12 +1,13 @@
 package com.kayyagari;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
 import org.joda.time.Period;
-import org.joda.time.format.ISOPeriodFormat;
-import org.joda.time.format.PeriodFormatter;
 
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
@@ -15,7 +16,7 @@ public class RevisionInfoTableModel extends AbstractTableModel {
 
     private List<RevisionInfo> revisions;
 
-    private PeriodFormatter pf = ISOPeriodFormat.standard();
+    private static DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
     private static final String[] columnNames = {"Id", "Message", "Committer", "Date"};
 
@@ -80,7 +81,22 @@ public class RevisionInfoTableModel extends AbstractTableModel {
     }
 
     private String formatTime(long t) {
-        Period period = new Period(t);
-        return pf.print(period);
+        Period period = new Period(t, System.currentTimeMillis());
+        String txt = null;
+        int hours = period.getHours();
+        if(hours > 0) {
+            txt = df.format(new Date(t));
+        }
+        else {
+            int min = period.getMinutes();
+            if(min > 0) {
+                txt = min + " minutes ago";
+            }
+            else {
+                txt = period.getSeconds() + " seconds ago";
+            }
+        }
+
+        return txt;
     }
 }

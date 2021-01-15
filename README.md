@@ -10,3 +10,16 @@ Another caveat is that various libraries of MirthConnect distribution must be pr
 
 Once the above are taken care of then run `mvn clean install` to build the extenstion. The final artifact will be present under
 `package/target` folder with the name `git-ext-<version>.zip`.  
+
+# Screenshots
+#####1. Version history tab added to the channel editor
+![](screenshots/1-git-ext-tab.png)
+
+#####2. Version history data
+![](screenshots/2-history-table.png)
+
+#####3. Object diff view
+![](screenshots/3-obj-diff-view.png)
+
+#####4. XML diff view
+![](screenshots/4-xml-diff-view.png)

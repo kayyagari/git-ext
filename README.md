@@ -3,7 +3,7 @@ This is a MirthConnect extension for version controlling Channels and CodeTempla
 Git is used as the VCS on the serverside using JGit.
 
 # Building
-This project depends on Objmeld project for creating visual diffs and it should be built first. Its source is not included here due
+This project depends on [Objmeld](https://github.com/kayyagari/objmeld) project for creating visual diffs and it should be built first. Its source is not included here due
 to licensing issues (The project JMeld from which Objmeld was derived was released under LGPL).
 
 Another caveat is that various libraries of MirthConnect distribution must be present in your Maven repo (local or remote).

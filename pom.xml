@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
 
   <properties>
-    <mc.version>3.9.1</mc.version>
+    <mc.version>3.10.1</mc.version>
     <plugin.supported.mc.versions>${mc.version}</plugin.supported.mc.versions>
     <jgit.version>5.9.0.202009080501-r</jgit.version>
     <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>

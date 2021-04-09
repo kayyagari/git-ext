@@ -56,7 +56,7 @@
                         <configuration>
                         <!-- including all the classes of ognl library so that only one client specific
                         jar is present besides the shared jar also it makes JavaWS show the name(which
-                        otherwisedoesn't appear if ognl jar is verified first due to missing Application-Name
+                        otherwise doesn't appear if ognl jar is verified first due to missing Application-Name
                         property in MANIFEST.MF) of the extension on the security dialog -->
                             <artifactItems>
                                 <artifactItem>

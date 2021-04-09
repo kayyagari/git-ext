@@ -30,6 +30,13 @@
       <url>mailto:kayyagari@apache.org</url>
   </organization>
 
+    <repositories>
+        <repository>
+            <id>mirth-libs</id>
+            <url>https://nexus.kaurpalang.com/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
   <dependencies>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
@@ -42,12 +49,12 @@
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.mirth.connect</groupId>
-            <artifactId>donkey-server</artifactId>
-            <version>${mc.version}</version>
-            <scope>provided</scope>
-        </dependency>
+          <dependency>
+              <groupId>com.mirth.connect</groupId>
+              <artifactId>donkey-server</artifactId>
+              <version>${mc.version}</version>
+              <scope>provided</scope>
+          </dependency>
         <dependency>
             <groupId>com.mirth.connect</groupId>
             <artifactId>mirth-client-core</artifactId>
@@ -55,49 +62,49 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.connectors</groupId>
             <artifactId>vm-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.plugins.datatypes</groupId>
             <artifactId>datatype-raw-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.plugins.datatypes</groupId>
             <artifactId>datatype-hl7v2-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.connectors</groupId>
             <artifactId>js-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.plugins</groupId>
             <artifactId>javascriptstep-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.connectors</groupId>
             <artifactId>tcp-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.plugins</groupId>
             <artifactId>mllpmode-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.extensions</groupId>
+            <groupId>com.mirth.connect.plugins</groupId>
             <artifactId>http-shared</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>

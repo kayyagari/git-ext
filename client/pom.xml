@@ -19,7 +19,7 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.mirth.connect.client</groupId>
+            <groupId>com.mirth.connect</groupId>
             <artifactId>mirth-client</artifactId>
             <version>${mc.version}</version>
             <scope>provided</scope>
@@ -39,6 +39,7 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

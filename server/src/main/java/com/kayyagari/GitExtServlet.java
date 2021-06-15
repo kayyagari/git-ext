@@ -33,7 +33,7 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
             return repo.getHistory(fileName);
         }
         catch (NoHeadException noHeadException) {
-            log.fatal("no history found");
+            log.info("no history found for file " + fileName);
             return new ArrayList<>();
         }
         catch(Exception e) {

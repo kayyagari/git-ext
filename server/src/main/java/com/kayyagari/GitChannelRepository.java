@@ -73,7 +73,6 @@ public class GitChannelRepository {
                 throw new RuntimeException(e);
             }
         }
-
     }
     
     public static GitChannelRepository getInstance() {

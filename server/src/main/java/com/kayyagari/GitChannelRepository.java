@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +43,7 @@ public class GitChannelRepository {
 
     private ObjectXMLSerializer serializer;
 
-    private Charset utf8 = Charset.forName("utf-8");
+    private Charset utf8 = StandardCharsets.UTF_8;
 
     private static Logger log = LoggerFactory.getLogger(GitChannelRepository.class);
 
@@ -135,7 +136,7 @@ public class GitChannelRepository {
 
     public List<RevisionInfo> getHistory(String fileName) throws Exception {
         List<RevisionInfo> lst = new ArrayList<>();
-        
+
         Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
         while(rcItr.hasNext()) {
             RevCommit rc = rcItr.next();

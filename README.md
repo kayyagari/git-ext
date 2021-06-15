@@ -11,6 +11,9 @@ Another caveat is that various libraries of MirthConnect distribution must be pr
 Once the above are taken care of then run `mvn clean install` to build the extenstion. The final artifact will be present under
 `package/target` folder with the name `git-ext-<version>.zip`.  
 
+# Notes
+- When using this plugin in a Docker deployment, set `XDG_CONFIG_HOME` environment variable to `/opt/connect`. This ensures JGit writes it's config to Connect working dir so mirth user can create the necessary dirtree. [SO answer](https://stackoverflow.com/a/65735434/2154297)
+
 # Screenshots
 ##### 1. Version history tab added to the channel editor
 ![](screenshots/1-git-ext-tab.png)

@@ -117,4 +117,11 @@ public class ChannelRepositoryTest {
         content = repo.getContent(channel1.getId(), "abcde"); // valid file but invalid hash
         assertNull(content);
     }
+
+    // test fetching history when no file was committed
+    @Test
+    public void testFetchHistoryOnNewRepo() throws Exception {
+    	List<RevisionInfo> commits = repo.getHistory("non-existing-file");
+    	assertTrue(commits.isEmpty());
+    }
 }

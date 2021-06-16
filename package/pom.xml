@@ -6,7 +6,7 @@
     <parent>
         <artifactId>git-ext</artifactId>
         <groupId>com.kayyagari</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>git-ext-package</artifactId>
@@ -21,17 +21,17 @@
         <dependency>
             <groupId>com.kayyagari</groupId>
             <artifactId>git-ext-server</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.kayyagari</groupId>
             <artifactId>git-ext-shared</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.kayyagari</groupId>
             <artifactId>git-ext-client</artifactId>
-            <version>${project.version}</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 

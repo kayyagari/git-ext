@@ -9,26 +9,39 @@
   <name>Git Extension</name>
   <packaging>pom</packaging>
 
-  <properties>
-    <mc.version>3.11.0</mc.version>
-    <plugin.supported.mc.versions>${mc.version}</plugin.supported.mc.versions>
-    <jgit.version>5.9.0.202009080501-r</jgit.version>
-    <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
-    <ognl.version>3.2.15</ognl.version>
-    <objmeld.version>3.4.0</objmeld.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <properties>
+        <plugin.supported.mc.versions>${mc.version}, 3.10.1, 3.10.0, 3.9.1, 3.9.0</plugin.supported.mc.versions>
 
-    <signing.keystore>${user.dir}/gitextplugin.jks</signing.keystore>
-    <signing.alias>alias</signing.alias>
-    <signing.storepass>secret</signing.storepass>
-    <signing.keypass>secret</signing.keypass>
-    <signing.tsa />    
-  </properties>
+        <mc.version>3.11.0</mc.version>
+        <jgit.version>5.12.0.202106070339-r</jgit.version>
+        <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
+        <ognl.version>3.2.15</ognl.version>
+        <objmeld.version>3.4.0</objmeld.version>
+        <javax-servlet.version>4.0.1</javax-servlet.version>
+        <javax-rs-api.version>2.0.1</javax-rs-api.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <xstream.version>1.4.17</xstream.version>
+        <junit.version>4.13.2</junit.version>
+        <rhino.version>1.7.13</rhino.version>
+        <xpp3.version>1.1.4c</xpp3.version>
+        <commons-io.version>2.10.0</commons-io.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <log4j.version>1.2.17</log4j.version>
+        <javassist.version>3.28.0-GA</javassist.version>
 
-  <organization>
-      <name>Kiran Ayyagari</name>
-      <url>mailto:kayyagari@apache.org</url>
-  </organization>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <signing.keystore>${user.dir}/gitextplugin.jks</signing.keystore>
+        <signing.alias>alias</signing.alias>
+        <signing.storepass>secret</signing.storepass>
+        <signing.keypass>secret</signing.keypass>
+        <signing.tsa />
+    </properties>
+
+    <organization>
+        <name>Kiran Ayyagari</name>
+        <url>mailto:kayyagari@apache.org</url>
+    </organization>
 
     <repositories>
         <repository>
@@ -112,19 +125,19 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>${javax-servlet.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.0.1</version>
+            <version>${javax-rs-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.9.3</version>
+            <version>${commons-beanutils.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -143,49 +156,49 @@
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.26.0-GA</version>
+            <version>${javassist.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.7</version>
+            <version>${xstream.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <version>${log4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
+            <version>${commons-lang3.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>${commons-io.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>xpp3</groupId>
             <artifactId>xpp3</artifactId>
-            <version>1.1.4c</version>
+            <version>${xpp3.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-            <version>1.7.9</version>
+            <version>${rhino.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
   </dependencies>
@@ -224,11 +237,4 @@
       </plugin>      
     </plugins>
   </build>
-
-<repositories>
-  <repository>
-    <id>nexus</id>
-    <url>https://nexus.kaurpalang.com/repository/maven-public/</url>
-  </repository>
-</repositories>
 </project>

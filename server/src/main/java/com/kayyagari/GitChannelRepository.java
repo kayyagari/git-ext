@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.errors.MissingObjectException;
+import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
@@ -135,11 +136,13 @@ public class GitChannelRepository {
 
     public List<RevisionInfo> getHistory(String fileName) throws Exception {
         List<RevisionInfo> lst = new ArrayList<>();
-
-        Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
-        while(rcItr.hasNext()) {
-            RevCommit rc = rcItr.next();
-            lst.add(toRevisionInfo(rc));
+        
+        if(repo.resolve(Constants.HEAD) != null) {
+        	Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
+        	while(rcItr.hasNext()) {
+        		RevCommit rc = rcItr.next();
+        		lst.add(toRevisionInfo(rc));
+        	}
         }
 
         return lst;

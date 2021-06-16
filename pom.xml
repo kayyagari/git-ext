@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.kayyagari</groupId>
-  <artifactId>git-ext</artifactId>
-  <version>${revision}</version>
+    <groupId>com.kayyagari</groupId>
+    <artifactId>git-ext</artifactId>
+    <version>${revision}</version>
 
-  <name>Git Extension</name>
-  <packaging>pom</packaging>
+    <name>Git Extension</name>
+    <packaging>pom</packaging>
 
     <properties>
         <revision>1.0.1-SNAPSHOT</revision>
@@ -52,7 +52,7 @@
         </repository>
     </repositories>
 
-  <dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
@@ -64,12 +64,12 @@
             <version>${mc.version}</version>
             <scope>provided</scope>
         </dependency>
-          <dependency>
-              <groupId>com.mirth.connect</groupId>
-              <artifactId>donkey-server</artifactId>
-              <version>${mc.version}</version>
-              <scope>provided</scope>
-          </dependency>
+        <dependency>
+            <groupId>com.mirth.connect</groupId>
+            <artifactId>donkey-server</artifactId>
+            <version>${mc.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.mirth.connect</groupId>
             <artifactId>mirth-client-core</artifactId>
@@ -148,7 +148,7 @@
             <version>${ognl.version}</version>
             <exclusions>
                 <exclusion>
-                  <!-- excluding the dependency to avoid classloading issues
+                    <!-- excluding the dependency to avoid classloading issues
                        because MC already bundles a higher version. -->
                     <groupId>org.javassist</groupId>
                     <artifactId>javassist</artifactId>
@@ -203,40 +203,40 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-  </dependencies>
+    </dependencies>
 
-  <modules>
-    <module>server</module>
-    <module>shared</module>
-    <module>client</module>
-    <module>package</module>
-  </modules>
+    <modules>
+        <module>server</module>
+        <module>shared</module>
+        <module>client</module>
+        <module>package</module>
+    </modules>
 
-  <build>
-    <plugins>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
-          <configuration>
-              <source>1.8</source>
-              <target>1.8</target>
-          </configuration>
-      </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-          <configuration>
-              <archive>
-                  <manifestEntries>
-                      <Application-Name>Git Extension</Application-Name>
-                      <url>${project.url}</url>
-                      <authors>Kiran Ayyagari</authors>
-                  </manifestEntries>
-              </archive>
-          </configuration>
-      </plugin>      
-    </plugins>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Application-Name>Git Extension</Application-Name>
+                            <url>${project.url}</url>
+                            <authors>Kiran Ayyagari</authors>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -20,6 +20,7 @@ import java.util.List;
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
 public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
+    private static Logger log = Logger.getLogger(VersionHistoryTabPanel.class);
 
     private RevisionInfoTable tblRevisions;
 
@@ -107,7 +108,7 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
 
     @Override
     public void save(Channel channel) {
-        System.out.println("saving channel " + channel.getId());
+        log.info("saving channel " + channel.getId());
     }
     
     private void showDiffWindow() {

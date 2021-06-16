@@ -79,36 +79,23 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         JScrollPane scrollPane = new JScrollPane(tblRevisions);
         scrollPane.addMouseListener(popupListener);
         add(scrollPane);
+
+        parent.addTask("loadHistory", "Refresh history", "Refresh version history.", "", new ImageIcon(com.mirth.connect.client.ui.Frame.class.getResource("images/arrow_refresh.png")), parent.channelEditTasks, parent.channelEditPopupMenu, this);
     }
 
     @Override
     public void load(Channel channel) {
         cid = channel.getId();
-        //System.out.println("loading channel " + cid);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // initialize once
-                    // doing here because do not want to delay the startup of MC client which takes several seconds to start. 
-                    if(gitServlet == null) {
-                        gitServlet = parent.mirthClient.getServlet(GitExtServletInterface.class);
-                    }
-                    
-                    // then fetch revisions
-                    List<RevisionInfo> revisions = gitServlet.getHistory(cid);
-                    RevisionInfoTableModel model = new RevisionInfoTableModel(revisions);
-                    tblRevisions.setModel(model);
-                } catch (Exception e) {
-                    PlatformUI.MIRTH_FRAME.alertThrowable(PlatformUI.MIRTH_FRAME, e);
-                }
-            }
-        });
+        this.loadHistory();
     }
 
     @Override
     public void save(Channel channel) {
         log.info("saving channel " + channel.getId());
+    }
+
+    public void loadHistory() {
+        SwingUtilities.invokeLater(new LoadGitHistoryRunnable());
     }
     
     private void showDiffWindow() {
@@ -143,5 +130,25 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         }
         
         return ch;
+    }
+
+    private class LoadGitHistoryRunnable implements Runnable {
+        @Override
+        public void run() {
+            try {
+                // initialize once
+                // doing here because do not want to delay the startup of MC client which takes several seconds to start.
+                if(gitServlet == null) {
+                    gitServlet = parent.mirthClient.getServlet(GitExtServletInterface.class);
+                }
+
+                // then fetch revisions
+                List<RevisionInfo> revisions = gitServlet.getHistory(cid);
+                RevisionInfoTableModel model = new RevisionInfoTableModel(revisions);
+                tblRevisions.setModel(model);
+            } catch (Exception e) {
+                PlatformUI.MIRTH_FRAME.alertThrowable(PlatformUI.MIRTH_FRAME, e);
+            }
+        }
     }
 }

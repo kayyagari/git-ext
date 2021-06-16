@@ -1,6 +1,5 @@
 package com.kayyagari;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.server.api.MirthServlet;
-import org.eclipse.jgit.api.errors.NoHeadException;
 
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
@@ -31,10 +29,6 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
     public List<RevisionInfo> getHistory(String fileName) throws ClientException {
         try {
             return repo.getHistory(fileName);
-        }
-        catch (NoHeadException noHeadException) {
-            log.info("no history found for file " + fileName);
-            return new ArrayList<>();
         }
         catch(Exception e) {
             log.warn("failed to get the history of file " + fileName, e);

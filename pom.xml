@@ -22,7 +22,7 @@
     <signing.alias>alias</signing.alias>
     <signing.storepass>secret</signing.storepass>
     <signing.keypass>secret</signing.keypass>
-    <signing.tsa />    
+    <signing.tsa />
   </properties>
 
   <organization>

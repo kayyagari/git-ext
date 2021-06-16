@@ -86,7 +86,7 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     @Override
     public void load(Channel channel) {
         cid = channel.getId();
-        this.loadHistory();
+        this.loadHistory(false);
     }
 
     @Override
@@ -95,7 +95,11 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     }
 
     public void loadHistory() {
-        SwingUtilities.invokeLater(new LoadGitHistoryRunnable());
+        this.loadHistory(true);
+    }
+
+    public void loadHistory(boolean shouldNotifyOnComplete) {
+        SwingUtilities.invokeLater(new LoadGitHistoryRunnable(shouldNotifyOnComplete));
     }
     
     private void showDiffWindow() {
@@ -133,6 +137,12 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     }
 
     private class LoadGitHistoryRunnable implements Runnable {
+        private boolean shouldNotifyOnComplete;
+
+        LoadGitHistoryRunnable(boolean shouldNotifyOnComplete) {
+            this.shouldNotifyOnComplete = shouldNotifyOnComplete;
+        }
+
         @Override
         public void run() {
             try {
@@ -146,6 +156,10 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
                 List<RevisionInfo> revisions = gitServlet.getHistory(cid);
                 RevisionInfoTableModel model = new RevisionInfoTableModel(revisions);
                 tblRevisions.setModel(model);
+
+                if (shouldNotifyOnComplete) {
+                    PlatformUI.MIRTH_FRAME.alertInformation(parent, "History refreshed!");
+                }
             } catch (Exception e) {
                 PlatformUI.MIRTH_FRAME.alertThrowable(PlatformUI.MIRTH_FRAME, e);
             }

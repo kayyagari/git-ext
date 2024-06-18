@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+   Copyright [2024] [Kiran Ayyagari]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,9 +29,9 @@
     <properties>
         <revision>1.0.1-SNAPSHOT</revision>
 
-        <plugin.supported.mc.versions>${mc.version}, 3.10.1, 3.10.0, 3.9.1, 3.9.0</plugin.supported.mc.versions>
+        <plugin.supported.mc.versions>${mc.version}, 3.11.0, 3.10.1, 3.10.0, 3.9.1, 3.9.0</plugin.supported.mc.versions>
 
-        <mc.version>3.11.0</mc.version>
+        <mc.version>3.12.0</mc.version>
         <jgit.version>5.12.0.202106070339-r</jgit.version>
         <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
         <ognl.version>3.2.15</ognl.version>
@@ -48,7 +65,7 @@
     <repositories>
         <repository>
             <id>mirth-libs</id>
-            <url>https://nexus.kaurpalang.com/repository/maven-public/</url>
+            <url>https://repo.repsy.io/mvn/kpalang/mirthconnect</url>
         </repository>
     </repositories>
 

@@ -12,9 +12,9 @@
     <properties>
         <revision>1.0.1-SNAPSHOT</revision>
 
-        <plugin.supported.mc.versions>${mc.version}, 3.11.0, 3.10.1, 3.10.0, 3.9.1, 3.9.0</plugin.supported.mc.versions>
+        <plugin.supported.mc.versions>${mc.version}, 3.10.1, 3.10.0, 3.9.1, 3.9.0</plugin.supported.mc.versions>
 
-        <mc.version>3.12.0</mc.version>
+        <mc.version>3.11.0</mc.version>
         <jgit.version>5.12.0.202106070339-r</jgit.version>
         <jgit.JavaEWAH.version>1.1.7</jgit.JavaEWAH.version>
         <ognl.version>3.2.15</ognl.version>
@@ -30,7 +30,6 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <log4j.version>1.2.17</log4j.version>
         <javassist.version>3.28.0-GA</javassist.version>
-        <slf4j-api.version>1.7.30</slf4j-api.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -46,12 +45,12 @@
         <url>mailto:kayyagari@apache.org</url>
     </organization>
 
-   <!--  <repositories>
+    <repositories>
         <repository>
             <id>mirth-libs</id>
             <url>https://nexus.kaurpalang.com/repository/maven-public/</url>
         </repository>
-    </repositories> -->
+    </repositories>
 
     <dependencies>
         <dependency>

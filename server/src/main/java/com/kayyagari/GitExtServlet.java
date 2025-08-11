@@ -6,17 +6,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
-import org.apache.log4j.Logger;
-
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.server.api.MirthServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
 public class GitExtServlet extends MirthServlet implements GitExtServletInterface {
 
-    private static Logger log = Logger.getLogger(GitExtServlet.class);
+    private static Logger log = LoggerFactory.getLogger(GitExtServlet.class);
 
     private GitChannelRepository repo;
 

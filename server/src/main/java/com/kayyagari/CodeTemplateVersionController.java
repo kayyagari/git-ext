@@ -1,7 +1,5 @@
 package com.kayyagari;
 
-import org.apache.log4j.Logger;
-
 import com.mirth.connect.donkey.server.Donkey;
 import com.mirth.connect.model.ServerEventContext;
 import com.mirth.connect.model.codetemplates.CodeTemplate;
@@ -9,13 +7,15 @@ import com.mirth.connect.model.codetemplates.CodeTemplateLibrary;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import com.mirth.connect.plugins.CodeTemplateServerPlugin;
 import com.mirth.connect.server.controllers.ControllerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
 public class CodeTemplateVersionController extends VersionControllerBase implements CodeTemplateServerPlugin {
 
-    private static Logger log = Logger.getLogger(CodeTemplateVersionController.class);
+    private static Logger log = LoggerFactory.getLogger(CodeTemplateVersionController.class);
 
     private GitChannelRepository repo;
     

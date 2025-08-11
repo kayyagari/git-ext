@@ -22,7 +22,8 @@ import com.mirth.connect.client.ui.PlatformUI;
 import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.InvalidChannel;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,13 +31,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
 public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
-    private static Logger log = Logger.getLogger(VersionHistoryTabPanel.class);
+    private static Logger log = LoggerFactory.getLogger(VersionHistoryTabPanel.class);
 
     private RevisionInfoTable tblRevisions;
 
@@ -55,6 +58,7 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     public VersionHistoryTabPanel(Frame parent) {
         this.parent = parent;
         this.serializer = ObjectXMLSerializer.getInstance();
+        this.serializer.allowTypes(Collections.EMPTY_LIST, Arrays.asList(RevisionInfo.class.getPackage().getName() + ".**"), Collections.EMPTY_LIST);
         setLayout(new BorderLayout());
 
         tblRevisions = new RevisionInfoTable();

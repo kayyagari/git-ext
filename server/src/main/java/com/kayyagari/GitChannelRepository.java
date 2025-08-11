@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -68,6 +70,7 @@ public class GitChannelRepository {
                 Git git = Git.init().setDirectory(channelRepo.dir).call();
                 channelRepo.repo = git.getRepository();
                 channelRepo.git = git;
+                serializer.allowTypes(Collections.EMPTY_LIST, Arrays.asList(RevisionInfo.class.getPackage().getName() + ".**"), Collections.EMPTY_LIST);
                 channelRepo.serializer = serializer;
             }
             catch(Exception e) {

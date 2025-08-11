@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.junit.After;
@@ -20,7 +21,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import com.mirth.connect.model.Channel;
-import com.mirth.connect.model.converters.ObjectXMLSerializer;
 
 public class ChannelRepositoryTest {
     @ClassRule
@@ -37,7 +37,7 @@ public class ChannelRepositoryTest {
     @BeforeClass
     public static void setup() throws Exception {
         serializer = ObjectXMLSerializer.getInstance();
-        serializer.init("3.9.1");
+        serializer.init("4.5.2");
     }
 
     @Before

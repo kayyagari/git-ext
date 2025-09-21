@@ -16,7 +16,7 @@ package com.kayyagari;
    limitations under the License.
 */
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
@@ -54,17 +54,12 @@ public class DiffWindow extends JDialog {
     private String leftStrContent;
     private String rightStrContent;
     
-    private JPanel labelPanel;
     private DiffWindow(String title, String leftLabel, String rightLabel, Object left, Object right) {
         this.left = left;
         this.right = right;
         this.leftLabel = leftLabel;
         this.rightLabel = rightLabel;
         tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-
-        labelPanel = new JPanel(new BorderLayout());
-        labelPanel.add(new JLabel("\t" + leftLabel), BorderLayout.EAST);
-        labelPanel.add(new JLabel(rightLabel + "\t"), BorderLayout.WEST);
 
         setTitle(title);
         add(tabbedPane);
@@ -78,7 +73,19 @@ public class DiffWindow extends JDialog {
         dd.prepareTextView(leftStrContent, rightStrContent);
         return dd;
     }
-    
+
+    private JPanel createLabelPanel() {
+        JPanel labelPanel = new JPanel(new BorderLayout());
+        JLabel lblLeft = new JLabel("\t" + leftLabel);
+        Font labelFont = new Font(lblLeft.getFont().getName(), Font.PLAIN, 15);
+        lblLeft.setFont(labelFont);
+        labelPanel.add(lblLeft, BorderLayout.EAST);
+        JLabel lblRight = new JLabel(rightLabel + "\t");
+        labelPanel.add(lblRight, BorderLayout.WEST);
+        lblRight.setFont(labelFont);
+        return labelPanel;
+    }
+
     private void prepareObjectView() {
         try {
             ObjectDiff od = new ObjectDiff(left, right);
@@ -95,7 +102,7 @@ public class DiffWindow extends JDialog {
         }
         
         JPanel panel = new JPanel(new BorderLayout());
-        panel.add(labelPanel, BorderLayout.NORTH);
+        panel.add(createLabelPanel(), BorderLayout.NORTH);
         panel.add(new JScrollPane(objDiffPanel), BorderLayout.CENTER);
         tabbedPane.add("Object View", panel);
     }
@@ -121,6 +128,7 @@ public class DiffWindow extends JDialog {
     private void prepareTextView(String leftStrContent, String rightStrContent) {
         JPanel panel = OgnlComparison.prepare(Collections.singletonList(new StringContent("", leftStrContent)), Collections.singletonList(new StringContent("", rightStrContent)), true);
         JPanel panel2 = new JPanel(new BorderLayout());
+        panel.add(createLabelPanel(), BorderLayout.NORTH);
         panel2.add(panel);
         tabbedPane.add("XML View", panel2);
     }

@@ -12,13 +12,15 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
-public class ChannelVersionController extends VersionControllerBase implements ChannelPlugin {
+public class ChannelVersionController implements ChannelPlugin {
 
     private static Logger log = LoggerFactory.getLogger(ChannelVersionController.class);
 
     private GitChannelRepository repo;
     
     private ObjectXMLSerializer serializer;
+
+    private VersionControllerUtil vcUtil;
 
     @Override
     public String getPluginPointName() {
@@ -28,7 +30,7 @@ public class ChannelVersionController extends VersionControllerBase implements C
     @Override
     public void start() {
         log.info("starting git-ext channel version controller");
-        userController = ControllerFactory.getFactory().createUserController();
+        vcUtil = new VersionControllerUtil(ControllerFactory.getFactory().createUserController());
         serializer = ObjectXMLSerializer.getInstance();
         String appDataDir = Donkey.getInstance().getConfiguration().getAppData();
         GitChannelRepository.init(appDataDir, serializer);
@@ -42,13 +44,13 @@ public class ChannelVersionController extends VersionControllerBase implements C
 
     @Override
     public void save(Channel channel, ServerEventContext sec) {
-        log.info("saving channel " + sec.getUserId());
-        repo.updateChannel(channel, getCommitter(sec));
+        log.info("saving channel {}", sec.getUserId());
+        repo.updateChannel(channel, vcUtil.getCommitter(sec));
     }
 
     @Override
     public void remove(Channel channel, ServerEventContext sec) {
-        repo.removeChannel(channel, getCommitter(sec));
+        repo.removeChannel(channel, vcUtil.getCommitter(sec));
     }
 
     @Override

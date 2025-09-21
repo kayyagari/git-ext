@@ -9,10 +9,14 @@ import com.mirth.connect.server.controllers.UserController;
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
-public abstract class VersionControllerBase {
+public class VersionControllerUtil {
     protected UserController userController;
-    
-    protected PersonIdent getCommitter(ServerEventContext sec) {
+
+    public VersionControllerUtil(UserController userController) {
+        this.userController = userController;
+    }
+
+    public PersonIdent getCommitter(ServerEventContext sec) {
         try {
             User user = userController.getUser(sec.getUserId(), null);
             String username = user.getUsername();

@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -44,18 +45,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Consumes(MediaType.APPLICATION_XML)
 @Produces(MediaType.APPLICATION_XML)
 public interface GitExtServletInterface extends BaseServletInterface {
-    public static final String PLUGIN_NAME = "Git Extension";
+    String PLUGIN_NAME = "Git Extension";
     
     @GET
     @Path("/history")
     @Operation(summary = "Returns a List of all revisions of the given filename")
     @MirthOperation(name = "getHistory", display = "Get all revisions of a file", permission = Permissions.CHANNELS_VIEW, type = ExecuteType.ASYNC, auditable = false)
-    public List<RevisionInfo> getHistory(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName) throws ClientException;
+    List<RevisionInfo> getHistory(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName) throws ClientException;
 
     @GET
     @Path("/content")
     @Operation(summary = "Returns the content of the given file at the specified revision")
     @MirthOperation(name = "getContent", display = "Get the content of the file at a specific revision", permission = Permissions.CHANNELS_VIEW, type = ExecuteType.SYNC, auditable = false)
-    public String getContent(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName,
+    String getContent(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName,
+            @Param("revision") @Parameter(description = "The value of revision", required = true) @QueryParam("revision") String revision) throws ClientException;
+
+    @POST
+    @Path("/revert")
+    @Operation(summary = "Revert the given file to the specified revision")
+    @MirthOperation(name = "revert", display = "Revert the given file to the specified revision", permission = Permissions.CHANNELS_VIEW, type = ExecuteType.SYNC, auditable = false)
+    void revert(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName,
             @Param("revision") @Parameter(description = "The value of revision", required = true) @QueryParam("revision") String revision) throws ClientException;
 }

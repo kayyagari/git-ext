@@ -8,6 +8,8 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.server.api.MirthServlet;
+import com.mirth.connect.server.controllers.ControllerFactory;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +22,12 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
 
     private GitChannelRepository repo;
 
+    private VersionControllerUtil vcUtil;
+
     public GitExtServlet(@Context HttpServletRequest request, @Context SecurityContext sc) {
         super(request, sc, PLUGIN_NAME);
         repo = GitChannelRepository.getInstance();
+        vcUtil = new VersionControllerUtil(ControllerFactory.getFactory().createUserController());
     }
 
     @Override
@@ -31,7 +36,7 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
             return repo.getHistory(fileName);
         }
         catch(Exception e) {
-            log.warn("failed to get the history of file " + fileName, e);
+            log.warn("failed to get the history of file {}", fileName, e);
             throw new ClientException(e);
         }
     }
@@ -42,9 +47,20 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
             return repo.getContent(fileName, revision);
         }
         catch(Exception e) {
-            log.warn("failed to get the content of file " + fileName + " at revision " + revision, e);
+            log.warn("failed to get the content of file {} at revision {}", fileName, revision, e);
             throw new ClientException(e);
         }
     }
 
+    @Override
+    public void revert(String fileName, String revision) throws ClientException {
+        try {
+            PersonIdent committer = vcUtil.getCommitter(context);
+            repo.revertFile(fileName, revision, committer);
+        }
+        catch (Exception e) {
+            log.warn("failed to revert file {} to revision {}", fileName, revision);
+            throw new ClientException(e);
+        }
+    }
 }

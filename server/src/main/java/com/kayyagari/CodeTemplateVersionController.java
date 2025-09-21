@@ -13,13 +13,15 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Kiran Ayyagari (kayyagari@apache.org)
  */
-public class CodeTemplateVersionController extends VersionControllerBase implements CodeTemplateServerPlugin {
+public class CodeTemplateVersionController implements CodeTemplateServerPlugin {
 
     private static Logger log = LoggerFactory.getLogger(CodeTemplateVersionController.class);
 
     private GitChannelRepository repo;
     
     private ObjectXMLSerializer serializer;
+
+    private VersionControllerUtil vcUtil;
 
     @Override
     public String getPluginPointName() {
@@ -29,7 +31,7 @@ public class CodeTemplateVersionController extends VersionControllerBase impleme
     @Override
     public void start() {
         log.info("starting git-ext CodeTemplate version controller");
-        userController = ControllerFactory.getFactory().createUserController();
+        vcUtil = new VersionControllerUtil(ControllerFactory.getFactory().createUserController());
         serializer = ObjectXMLSerializer.getInstance();
         String appDataDir = Donkey.getInstance().getConfiguration().getAppData();
         GitChannelRepository.init(appDataDir, serializer);
@@ -43,7 +45,7 @@ public class CodeTemplateVersionController extends VersionControllerBase impleme
 
     @Override
     public void remove(CodeTemplate ct, ServerEventContext sec) {
-        repo.removeCodeTemplate(ct, getCommitter(sec));
+        repo.removeCodeTemplate(ct, vcUtil.getCommitter(sec));
     }
 
     @Override
@@ -52,7 +54,7 @@ public class CodeTemplateVersionController extends VersionControllerBase impleme
 
     @Override
     public void save(CodeTemplate ct, ServerEventContext sec) {
-        repo.updateCodeTemplate(ct, getCommitter(sec));
+        repo.updateCodeTemplate(ct, vcUtil.getCommitter(sec));
     }
 
     @Override

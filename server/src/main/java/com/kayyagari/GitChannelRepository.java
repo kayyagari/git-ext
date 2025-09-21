@@ -152,11 +152,15 @@ public class GitChannelRepository {
     }
     
     public String getContent(String fileName, String revision) throws Exception {
-        String content = null;
-        if(StringUtils.isBlank(fileName) || StringUtils.isBlank(revision)) {
-            return content;
+        if(StringUtils.isBlank(fileName)) {
+            throw new IllegalArgumentException("fileName is required");
         }
 
+        if(StringUtils.isBlank(revision)) {
+            throw new IllegalArgumentException("revision is required");
+        }
+
+        String content = null;
         try(TreeWalk tw = new TreeWalk(repo)) {
             ObjectId rcid = repo.resolve(revision);
             if(rcid != null) {
@@ -184,11 +188,33 @@ public class GitChannelRepository {
             }
         }
         catch(MissingObjectException e) {
-            log.debug("commit " + revision + " not found for file " + fileName, e);
+            log.debug("commit {} not found for file {}", revision, fileName, e);
+            throw e;
         }
         return content;
     }
-    
+
+    public void revertFile(String fileName, String targetRevision, PersonIdent committer) throws Exception {
+        if(repo.resolve(Constants.HEAD) != null) {
+            Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
+            if(rcItr.hasNext()) {
+                RevCommit rc = rcItr.next();
+                if(rc.getName().equals(targetRevision)) {
+                    throw new IllegalArgumentException("cannot revert to the same revision");
+                }
+            }
+
+            String targetContent = getContent(fileName, targetRevision);
+            File f = new File(dir, fileName);
+            FileOutputStream fout = new FileOutputStream(f);
+            fout.write(targetContent.getBytes(utf8));
+            fout.close();
+
+            git.add().addFilepattern(fileName).call();
+            git.commit().setCommitter(committer).setMessage("reverted to revision " + targetRevision).call();
+        }
+    }
+
     private RevisionInfo toRevisionInfo(RevCommit rc) {
         RevisionInfo ri = new RevisionInfo();
         PersonIdent committer = rc.getCommitterIdent();

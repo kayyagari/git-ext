@@ -31,8 +31,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,10 +48,12 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     private GitExtServletInterface gitServlet;
 
     private String cid;
+    private String channelName;
 
     private JPopupMenu popupMenu;
     
     private JMenuItem mnuShowDiff;
+    private JMenuItem mnuRevert;
 
     private Frame parent;
     
@@ -76,6 +80,15 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         });
         popupMenu.add(mnuShowDiff);
 
+        mnuRevert = new JMenuItem("Revert to this version");
+        mnuRevert.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                revertToRevision();
+            }
+        });
+        popupMenu.add(mnuRevert);
+
         MouseAdapter popupListener = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -90,7 +103,9 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
             public void handlePopupEvent(MouseEvent e) {
                 if(e.isPopupTrigger()) {
                     //System.out.println("popup triggered");
-                    mnuShowDiff.setEnabled(tblRevisions.getSelectedRowCount() == 2);
+                    int selectedRows = tblRevisions.getSelectedRowCount();
+                    mnuShowDiff.setEnabled(selectedRows == 2);
+                    mnuRevert.setEnabled(selectedRows == 1);
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -106,6 +121,7 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
     @Override
     public void load(Channel channel) {
         cid = channel.getId();
+        channelName = channel.getName();
         this.loadHistory(false);
     }
 
@@ -135,10 +151,10 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
             String right = gitServlet.getContent(cid, ri2.getHash());
             Channel rightCh = parse(right, ri2.getShortHash());
 
-            String labelPrefix = leftCh.getName();
-            String leftLabel = labelPrefix + " Revision: " + ri1.getShortHash();
-            String rightLabel = labelPrefix + " Revision: " + ri2.getShortHash();
-            DiffWindow dw = DiffWindow.create("Channel Diff", leftLabel, rightLabel, leftCh, rightCh, left, right);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String leftLabel = String.format("Revision: %s (user: %s, time:%s)", ri1.getShortHash(), ri1.getCommitterName(), sdf.format(new Date(ri1.getTime())));
+            String rightLabel = String.format("Revision: %s (user: %s, time:%s)", ri2.getShortHash(), ri2.getCommitterName(), sdf.format(new Date(ri2.getTime())));
+            DiffWindow dw = DiffWindow.create("Channel Diff - " + channelName, leftLabel, rightLabel, leftCh, rightCh, left, right);
             dw.setSize(parent.getWidth() - 10, parent.getHeight()-10);
             dw.setVisible(true);
         }
@@ -154,6 +170,20 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         }
         
         return ch;
+    }
+
+    private void revertToRevision() {
+        popupMenu.setVisible(false);
+        int row = tblRevisions.getSelectedRow();
+        RevisionInfoTableModel model = (RevisionInfoTableModel)tblRevisions.getModel();
+        RevisionInfo targetRevision = model.getRevisionAt(row);
+        try {
+            gitServlet.revert(cid, targetRevision.getHash());
+            loadHistory(false);
+        }
+        catch(Exception e) {
+            PlatformUI.MIRTH_FRAME.alertThrowable(PlatformUI.MIRTH_FRAME, e);
+        }
     }
 
     private class LoadGitHistoryRunnable implements Runnable {

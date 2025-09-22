@@ -9,6 +9,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.model.Channel;
+import com.mirth.connect.server.api.CheckAuthorizedChannelId;
 import com.mirth.connect.server.api.MirthServlet;
 import com.mirth.connect.server.controllers.ChannelController;
 import com.mirth.connect.server.controllers.ControllerFactory;
@@ -59,6 +60,7 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
     }
 
     @Override
+    @CheckAuthorizedChannelId
     public boolean revertChannel(String channelId, String revision) throws ClientException {
         try {
             Channel channel = repo.getChannelAtRevision(channelId, revision);

@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mirth.connect.server.controllers.ChannelController;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.errors.MissingObjectException;
@@ -194,9 +195,9 @@ public class GitChannelRepository {
         return content;
     }
 
-    public void revertFile(String fileName, String targetRevision, PersonIdent committer) throws Exception {
+    public Channel getChannelAtRevision(String channelId, String targetRevision) throws Exception {
         if(repo.resolve(Constants.HEAD) != null) {
-            Iterator<RevCommit> rcItr = git.log().addPath(fileName).call().iterator();
+            Iterator<RevCommit> rcItr = git.log().addPath(channelId).call().iterator();
             if(rcItr.hasNext()) {
                 RevCommit rc = rcItr.next();
                 if(rc.getName().equals(targetRevision)) {
@@ -204,15 +205,10 @@ public class GitChannelRepository {
                 }
             }
 
-            String targetContent = getContent(fileName, targetRevision);
-            File f = new File(dir, fileName);
-            FileOutputStream fout = new FileOutputStream(f);
-            fout.write(targetContent.getBytes(utf8));
-            fout.close();
-
-            git.add().addFilepattern(fileName).call();
-            git.commit().setCommitter(committer).setMessage("reverted to revision " + targetRevision).call();
+            String targetContent = getContent(channelId, targetRevision);
+            return serializer.deserialize(targetContent, Channel.class);
         }
+        throw new IllegalArgumentException("no revision " + targetRevision + " of Channel " + channelId + " exists");
     }
 
     private RevisionInfo toRevisionInfo(RevCommit rc) {

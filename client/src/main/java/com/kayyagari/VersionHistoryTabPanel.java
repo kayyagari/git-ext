@@ -178,8 +178,10 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         RevisionInfoTableModel model = (RevisionInfoTableModel)tblRevisions.getModel();
         RevisionInfo targetRevision = model.getRevisionAt(row);
         try {
-            gitServlet.revert(cid, targetRevision.getHash());
-            loadHistory(false);
+            boolean reverted = gitServlet.revertChannel(cid, targetRevision.getHash());
+            if(reverted) {
+                loadHistory(false);
+            }
         }
         catch(Exception e) {
             PlatformUI.MIRTH_FRAME.alertThrowable(PlatformUI.MIRTH_FRAME, e);

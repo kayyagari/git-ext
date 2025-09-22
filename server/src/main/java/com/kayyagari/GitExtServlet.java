@@ -1,5 +1,6 @@
 package com.kayyagari;
 
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,7 +8,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
 import com.mirth.connect.client.core.ClientException;
+import com.mirth.connect.model.Channel;
 import com.mirth.connect.server.api.MirthServlet;
+import com.mirth.connect.server.controllers.ChannelController;
 import com.mirth.connect.server.controllers.ControllerFactory;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.slf4j.Logger;
@@ -24,10 +27,13 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
 
     private VersionControllerUtil vcUtil;
 
+    private ChannelController channelController;
+
     public GitExtServlet(@Context HttpServletRequest request, @Context SecurityContext sc) {
         super(request, sc, PLUGIN_NAME);
         repo = GitChannelRepository.getInstance();
         vcUtil = new VersionControllerUtil(ControllerFactory.getFactory().createUserController());
+        channelController = ChannelController.getInstance();
     }
 
     @Override
@@ -53,13 +59,18 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
     }
 
     @Override
-    public void revert(String fileName, String revision) throws ClientException {
+    public boolean revertChannel(String channelId, String revision) throws ClientException {
         try {
-            PersonIdent committer = vcUtil.getCommitter(context);
-            repo.revertFile(fileName, revision, committer);
+            Channel channel = repo.getChannelAtRevision(channelId, revision);
+            String desc = channel.getDescription();
+            desc = desc + "\n(" + "reverted to revision " + revision + ")";
+            channel.setDescription(desc);
+            boolean result = channelController.updateChannel(channel, context, true, Calendar.getInstance());
+            log.debug("reverted Channel {} to revision {}", channelId, revision);
+            return result;
         }
         catch (Exception e) {
-            log.warn("failed to revert file {} to revision {}", fileName, revision);
+            log.warn("failed to revert Channel {} to revision {}", channelId, revision);
             throw new ClientException(e);
         }
     }

@@ -1,16 +1,6 @@
 package com.kayyagari;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.UUID;
-
+import com.mirth.connect.model.Channel;
 import com.mirth.connect.model.converters.ObjectXMLSerializer;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -21,7 +11,15 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.mirth.connect.model.Channel;
+import java.io.File;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class ChannelRepositoryTest {
     @ClassRule
@@ -124,41 +122,5 @@ public class ChannelRepositoryTest {
     public void testFetchHistoryOnNewRepo() throws Exception {
     	List<RevisionInfo> commits = repo.getHistory("non-existing-file");
     	assertTrue(commits.isEmpty());
-    }
-
-    @Test
-    public void testRevert() throws Exception {
-        String channelId = UUID.randomUUID().toString();
-        Channel channel1 = new Channel(channelId);
-        channel1.setRevision(1);
-        channel1.setDescription("description update 1");
-        channel1.setName("channel1");
-        repo.updateChannel(channel1, committer);
-
-        int revCount = 10;
-        for(int i=2; i<= revCount; i++) {
-            channel1.setRevision(i);
-            channel1.setDescription("description update " + i);
-            repo.updateChannel(channel1, committer);
-        }
-
-        List<RevisionInfo> historyBeforeRevert = repo.getHistory(channelId);
-        RevisionInfo secondCommit = historyBeforeRevert.get(historyBeforeRevert.size() - 2);
-        String secondCommitContent = repo.getContent(channelId, secondCommit.getHash());
-        assertTrue(secondCommitContent.contains("description update 2"));
-
-        String currentContent = repo.getContent(channelId, historyBeforeRevert.get(0).getHash());
-
-        File chFile = new File(repo.getDir(), channelId);
-        assertEquals(currentContent, FileUtils.readFileToString(chFile, StandardCharsets.UTF_8));
-
-        repo.revertFile(channelId, secondCommit.getHash(), committer);
-        List<RevisionInfo> historyAfterRevert = repo.getHistory(channelId);
-        assertEquals(historyBeforeRevert.size() + 1, historyAfterRevert.size());
-        currentContent = repo.getContent(channelId, historyAfterRevert.get(0).getHash());
-        assertEquals(secondCommitContent, currentContent);
-        assertTrue(currentContent.contains("description update 2"));
-
-        assertTrue(historyAfterRevert.get(0).getMessage().contains(secondCommit.getHash()));
     }
 }

@@ -61,9 +61,9 @@ public interface GitExtServletInterface extends BaseServletInterface {
             @Param("revision") @Parameter(description = "The value of revision", required = true) @QueryParam("revision") String revision) throws ClientException;
 
     @POST
-    @Path("/revert")
-    @Operation(summary = "Revert the given file to the specified revision")
-    @MirthOperation(name = "revert", display = "Revert the given file to the specified revision", permission = Permissions.CHANNELS_VIEW, type = ExecuteType.SYNC, auditable = false)
-    void revert(@Param("fileName") @Parameter(description = "The name of the file", required = true) @QueryParam("fileName") String fileName,
+    @Path("/revertChannel")
+    @Operation(summary = "Revert the given Channel to the specified revision")
+    @MirthOperation(name = "revert", display = "Revert the given Channel to the specified revision", permission = Permissions.CHANNELS_VIEW, type = ExecuteType.SYNC, auditable = false)
+    boolean revertChannel(@Param("channelId") @Parameter(description = "The ID of the Channel", required = true) @QueryParam("channelId") String channelId,
             @Param("revision") @Parameter(description = "The value of revision", required = true) @QueryParam("revision") String revision) throws ClientException;
 }

@@ -180,9 +180,9 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
         try {
             boolean reverted = gitServlet.revertChannel(cid, targetRevision.getHash());
             if(reverted) {
-                loadHistory(false);
                 PlatformUI.MIRTH_FRAME.channelPanel.clearChannelCache();
                 PlatformUI.MIRTH_FRAME.channelPanel.retrieveChannels(true);
+                PlatformUI.MIRTH_FRAME.channelPanel.switchPanel();
             }
         }
         catch(Exception e) {

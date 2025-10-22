@@ -9,6 +9,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import com.mirth.connect.client.core.ClientException;
 import com.mirth.connect.model.Channel;
+import com.mirth.connect.model.ChannelMetadata;
 import com.mirth.connect.server.api.CheckAuthorizedChannelId;
 import com.mirth.connect.server.api.MirthServlet;
 import com.mirth.connect.server.controllers.ChannelController;
@@ -64,6 +65,15 @@ public class GitExtServlet extends MirthServlet implements GitExtServletInterfac
     public boolean revertChannel(String channelId, String revision) throws ClientException {
         try {
             Channel channel = repo.getChannelAtRevision(channelId, revision);
+            ChannelMetadata metadata = channel.getExportData().getMetadata();
+            if(metadata == null) {
+                metadata = new ChannelMetadata();
+                channel.getExportData().setMetadata(metadata);
+            }
+            // without this the userId will be null and will result in a warning
+            // on the client when user tries to save the same channel after reverting
+            metadata.setUserId(context.getUserId());
+
             String desc = channel.getDescription();
             desc = desc + "\n(" + "reverted to revision " + revision + ")";
             channel.setDescription(desc);

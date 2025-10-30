@@ -21,6 +21,7 @@ import org.eclipse.jgit.lib.ObjectLoader;
 import org.eclipse.jgit.lib.ObjectStream;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
@@ -69,6 +70,11 @@ public class GitChannelRepository {
                 channelRepo.dir.mkdir();
                 
                 Git git = Git.init().setDirectory(channelRepo.dir).call();
+                StoredConfig config = git.getRepository().getConfig();
+                if(config.getBoolean("commit", "gpgsign", false)) {
+                    log.warn("gpg signing of commits is not yet supported, setting commit.gpgsign to false");
+                    config.setBoolean("commit", null, "gpgsign", false);
+                }
                 channelRepo.repo = git.getRepository();
                 channelRepo.git = git;
                 serializer.allowTypes(Collections.EMPTY_LIST, Arrays.asList(RevisionInfo.class.getPackage().getName() + ".**"), Collections.EMPTY_LIST);

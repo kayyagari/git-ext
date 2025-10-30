@@ -105,7 +105,12 @@ public class VersionHistoryTabPanel extends AbstractChannelTabPanel {
                     //System.out.println("popup triggered");
                     int selectedRows = tblRevisions.getSelectedRowCount();
                     mnuShowDiff.setEnabled(selectedRows == 2);
-                    mnuRevert.setEnabled(selectedRows == 1);
+
+                    if(selectedRows == 1) {
+                        int index = tblRevisions.getSelectedRow();
+                        // select only when it is not the latest revision
+                        mnuRevert.setEnabled(index != 0);
+                    }
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }

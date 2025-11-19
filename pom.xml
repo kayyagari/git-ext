@@ -229,6 +229,7 @@
     </dependencies>
 
     <modules>
+        <module>objmeld</module>
         <module>server</module>
         <module>shared</module>
         <module>client</module>

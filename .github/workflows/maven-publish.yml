@@ -37,3 +37,6 @@ jobs:
     #     GITHUB_TOKEN: ${{ github.token }}
     - name: Download a Build Artifact
       uses: actions/download-artifact@v6.0.0
+      with:
+        path: package/target
+        pattern: git-ext-*.zip

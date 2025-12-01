@@ -35,8 +35,8 @@ jobs:
     #   run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
     #   env:
     #     GITHUB_TOKEN: ${{ github.token }}
-    - name: Download a Build Artifact
-      uses: actions/download-artifact@v6.0.0
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
       with:
-        path: package/target
-        pattern: git-ext-*.zip
+        name: git-ext.zip
+        path: package/target/git-ext-*.zip

@@ -35,3 +35,5 @@ jobs:
     #   run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
     #   env:
     #     GITHUB_TOKEN: ${{ github.token }}
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v6.0.0

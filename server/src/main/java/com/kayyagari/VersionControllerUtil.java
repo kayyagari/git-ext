@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2024 Kiran Ayyagari
+// SPDX-License-Identifier: MPL-2.0
+
 package com.kayyagari;
 
 import org.eclipse.jgit.lib.PersonIdent;
